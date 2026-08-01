@@ -214,16 +214,20 @@ export const logoutUser =
   async (dispatch, getState) => {
     dispatch(setLoading(true));
     try {
+      await signOut(auth);
+      dispatch(clearUser());
+
       const state = getState();
       const currentUser = state.auth.user;
 
       if (currentUser) {
-        const userRef = doc(db, "users", currentUser.id);
-        await updateDoc(userRef, { status: "offline" });
+        try {
+          const userRef = doc(db, "users", currentUser.id);
+          await updateDoc(userRef, { status: "offline" });
+        } catch {
+          // Best-effort: don't block logout if the status write fails
+        }
       }
-
-      await signOut(auth);
-      dispatch(clearUser());
 
       return { success: true };
     } catch (error: any) {

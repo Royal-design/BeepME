@@ -16,6 +16,15 @@ import { EditProfileDialog } from "./EditProfileDialog";
 import { ProfileDialog } from "./ProfileDialog";
 import { Avatar } from "./Avatar";
 import { useAppSelector } from "@/redux/store";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface ProfileMenuProps {
   trigger?: React.ReactElement;
@@ -27,11 +36,16 @@ export const ProfileMenu = ({ trigger, align = "end" }: ProfileMenuProps) => {
   const user = useAppSelector((state) => state.auth.user);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isConfirmSignOutOpen, setIsConfirmSignOutOpen] = useState(false);
+  const [loadingSignOut, setLoadingSignOut] = useState(false);
   const navigate = useNavigate();
 
   const signOut = async () => {
+    setLoadingSignOut(true);
     const response = await dispatch(logoutUser());
+    setLoadingSignOut(false);
     if (response.success) {
+      setIsConfirmSignOutOpen(false);
       toast.success("Signed out");
       navigate("/login");
     } else {
@@ -76,13 +90,44 @@ export const ProfileMenu = ({ trigger, align = "end" }: ProfileMenuProps) => {
           <DropdownMenuItem
             variant="destructive"
             className="cursor-pointer focus:bg-destructive/10"
-            onClick={signOut}
+            onClick={() => setIsConfirmSignOutOpen(true)}
           >
             <LogOut />
             <span>Sign out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Dialog
+        open={isConfirmSignOutOpen}
+        onOpenChange={setIsConfirmSignOutOpen}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Sign out?</DialogTitle>
+            <DialogDescription>
+              You&apos;ll need to log in again to continue chatting.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsConfirmSignOutOpen(false)}
+              disabled={loadingSignOut}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={signOut}
+              disabled={loadingSignOut}
+            >
+              <LogOut />
+              {loadingSignOut ? "Signing out…" : "Sign out"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <EditProfileDialog
         isEditDialogOpen={isEditDialogOpen}

@@ -5,6 +5,7 @@ import { ProfileMenu } from "./ProfileMenu";
 import { SearchBar } from "./SearchBar";
 import { NewChatDialog } from "./NewChatDialog";
 import { ConversationList } from "./ConversationList";
+import { SignOutButton } from "./SignOutButton";
 
 export const MobileChatsPage = () => {
   const user = useAppSelector((state) => state.auth.user);
@@ -16,7 +17,10 @@ export const MobileChatsPage = () => {
           <Avatar src={user?.photo} name={user?.name} size="sm" />
           <p className="text-sm font-semibold">Chats</p>
         </div>
-        <ProfileMenu align="end" />
+        <div className="flex items-center gap-1">
+          <SignOutButton />
+          <ProfileMenu align="end" />
+        </div>
       </header>
 
       <div className="flex items-center gap-2 px-4 pb-3">
