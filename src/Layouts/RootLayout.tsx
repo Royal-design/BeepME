@@ -17,7 +17,7 @@ export const RootLayout = () => {
 
   if (isMobile) {
     return (
-      <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+      <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
         <main className="min-h-0 flex-1">
           <Outlet />
         </main>
@@ -27,7 +27,7 @@ export const RootLayout = () => {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-foreground">
+    <div className="flex h-dvh overflow-hidden bg-background text-foreground">
       <IconRail collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
       <AppSidebar collapsed={collapsed} />
       <main className="min-w-0 flex-1">

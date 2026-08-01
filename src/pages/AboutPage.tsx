@@ -2,6 +2,7 @@ import {
   MessageSquareText,
   ShieldCheck,
   Smartphone,
+  Sparkles,
   UsersRound,
   Zap
 } from "lucide-react";
@@ -12,6 +13,11 @@ const features = [
     icon: MessageSquareText,
     title: "Real-time messaging",
     desc: "Messages land the moment they're sent — no refresh required."
+  },
+  {
+    icon: Sparkles,
+    title: "AI auto-reply",
+    desc: "Gemini keeps conversations moving when someone's away — replying naturally until they return."
   },
   {
     icon: ShieldCheck,
@@ -51,9 +57,9 @@ export const AboutPage = () => {
           BeepME
         </h1>
         <p className="mt-4 max-w-md text-center text-sm leading-relaxed text-muted-foreground">
-          A real-time chat application built with React and Firebase. BeepME
-          keeps conversations fast, private and beautifully simple — so you can
-          focus on the people you&apos;re talking to, not the app in between.
+          A real-time chat application built with React, Firebase and Gemini
+          AI. BeepME keeps conversations fast, private and beautifully simple —
+          and when someone&apos;s away, Gemini steps in to keep the buzz going.
         </p>
 
         <ul className="mt-10 grid w-full gap-3 sm:grid-cols-2">

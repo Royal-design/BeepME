@@ -13,7 +13,7 @@ interface ChatMessageListProps {
 
 const GROUP_WINDOW_MS = 5 * 60 * 1000;
 
-function isSameDay(a: any, b: any) {
+function isSameDay(a: MessageData, b: MessageData) {
   const da = new Date(a.createdAt?.toDate?.() ?? a.createdAt ?? Date.now());
   const db = new Date(b.createdAt?.toDate?.() ?? b.createdAt ?? Date.now());
   return da.toDateString() === db.toDateString();
@@ -50,7 +50,7 @@ export function ChatMessageList({
   return (
     <div
       ref={scrollerRef}
-      className="scrollbar-thin hex-wall h-full overflow-y-auto px-4 pb-4 sm:px-8"
+      className="scrollbar-thin hex-wall min-h-0 flex-1 overflow-y-auto px-4 pb-4 sm:px-8"
       aria-live="polite"
     >
       <div className="mx-auto flex max-w-3xl flex-col">
