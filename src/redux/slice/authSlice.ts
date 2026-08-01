@@ -32,6 +32,7 @@ export type UserType = {
   status: string;
   bio?: string;
   blocked: string[];
+  lastSeen?: any;
 };
 
 interface AuthState {

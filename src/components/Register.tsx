@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,20 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RegisterFormData, registerSchema } from "@/schema/registerSchema";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "./ui/card";
 import { useAppDispatch } from "@/redux/store";
 import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "@/redux/slice/authSlice";
-import chattLogo from "../assets/BEEPME.png";
-
+import { BEEPME } from "@/assets/logo";
 import { toast } from "sonner";
 import { UserLoadingSpinner } from "./UserLoadingSpinner";
+import { AuthShell } from "./AuthShell";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -48,111 +40,118 @@ export const Register = () => {
     if (response.success) {
       form.reset();
       navigate("/chats");
-      toast.success("User registered successfully");
+      toast.success("Account created");
     } else {
       toast.error(response.message || "Registration failed");
     }
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-8 h-screen flex flex-col p-8  justify-center  items-center w-full"
-      >
-        <Card className="max-w-sm text-light w-full mx-auto p-2 md:p-4 md:border md:border-border-color border-0 bg-background rounded-md ">
-          <CardHeader className="text-center flex flex-col items-center text-xl md:text2xl mb-4 fontbold">
-            <img
-              src={chattLogo}
-              alt="chatty-bee"
-              className="size-15 object-contain"
-            />
-            <CardTitle className="text-light"> Create an Account</CardTitle>
-            <p className="text-sm text-light  mt-2">
-              Sign Up & Start Connecting with BeepME
-            </p>
-          </CardHeader>
-          <CardContent className="p-0 flex flex-col gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your name"
-                      {...field}
-                      className="text-light h-12 border border-border-color"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your email"
-                      {...field}
-                      className="text-light h-12 border border-border-color"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      className="text-light h-12 border border-border-color"
-                      {...field}
-                    />
-                  </FormControl>
+    <AuthShell>
+      <div className="w-full max-w-sm">
+        <div className="mb-8 flex flex-col items-center lg:hidden">
+          <img
+            src={BEEPME}
+            alt=""
+            className="size-14 rounded-2xl object-contain ring-1 ring-border"
+          />
+        </div>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
+        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+          <h1 className="font-display text-2xl font-medium tracking-tight">
+            Create your account
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Join the hive and start buzzing.
+          </p>
 
-          <CardFooter className="p-0 flex flex-col gap-1">
-            <Button
-              disabled={form.formState.isSubmitting}
-              type="submit"
-              className="w-full text-light h-12 bg-background-heavy border-border-color border hover:bg-background-hover"
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="mt-6 space-y-4"
             >
-              {form.formState.isSubmitting ? (
-                <UserLoadingSpinner />
-              ) : (
-                "Register"
-              )}
-            </Button>
-            <p className="text-light text-sm mt-2">
-              {" "}
-              You have an account?{" "}
-              <Link
-                to="/login"
-                className="text-light text-sm hover:text-heavy transition"
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        autoComplete="name"
+                        placeholder="Your name"
+                        className="h-11 bg-background"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        autoComplete="email"
+                        placeholder="you@example.com"
+                        className="h-11 bg-background"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="Create a password"
+                        className="h-11 bg-background"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                disabled={form.formState.isSubmitting}
+                type="submit"
+                className="h-11 w-full cursor-pointer"
               >
-                Sign in
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
-      </form>
-    </Form>
+                {form.formState.isSubmitting ? (
+                  <UserLoadingSpinner />
+                ) : (
+                  "Create account"
+                )}
+              </Button>
+            </form>
+          </Form>
+
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-medium text-accent transition-colors hover:text-accent-hover"
+            >
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
+    </AuthShell>
   );
 };

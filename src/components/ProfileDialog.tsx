@@ -1,7 +1,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle
 } from "./ui/dialog";
@@ -21,11 +20,12 @@ export const ProfileDialog = ({
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="bg-background text-heavy w-sm border-border-color border"
+        className="max-w-sm rounded-2xl border-border bg-surface-raised text-popover-foreground"
       >
         <DialogHeader>
-          <DialogTitle></DialogTitle>
-          <DialogDescription />
+          <DialogTitle className="font-display text-lg font-semibold tracking-tight">
+            Profile
+          </DialogTitle>
         </DialogHeader>
         <ProfilePage />
       </DialogContent>

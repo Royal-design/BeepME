@@ -8,6 +8,7 @@ export interface Chat {
   receiverId: string;
   user: UserType;
   updatedAt: number | any;
+  typingBy?: string | null;
 }
 
 interface FilterState {
@@ -48,6 +49,32 @@ export const filterSlice = createSlice({
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
+    },
+    updateChatUsers: (
+      state,
+      action: PayloadAction<Record<string, UserType>>
+    ) => {
+      const map = action.payload;
+      const merge = (list: Chat[]) =>
+        list.map((chat) =>
+          map[chat.receiverId] ? { ...chat, user: map[chat.receiverId] } : chat
+        );
+      state.originalChats = merge(state.originalChats);
+      state.chats = merge(state.chats);
+    },
+    updateChatTyping: (
+      state,
+      action: PayloadAction<Record<string, string | null>>
+    ) => {
+      const map = action.payload;
+      const merge = (list: Chat[]) =>
+        list.map((chat) =>
+          map[chat.chatId] !== undefined
+            ? { ...chat, typingBy: map[chat.chatId] }
+            : chat
+        );
+      state.originalChats = merge(state.originalChats);
+      state.chats = merge(state.chats);
     }
   }
 });
@@ -57,7 +84,9 @@ export const {
   setOriginalUsers,
   setFilteredChats,
   setFilteredUsers,
-  setLoading
+  setLoading,
+  updateChatUsers,
+  updateChatTyping
 } = filterSlice.actions;
 
 export const filterData = (query: string) => (dispatch: any, getState: any) => {

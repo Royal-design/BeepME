@@ -1,12 +1,16 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
-export function UserSkeleton() {
+interface UserSkeletonProps {
+  className?: string;
+}
+
+export function UserSkeleton({ className }: UserSkeletonProps) {
   return (
-    <div className="flex items-center space-x-4">
-      <Skeleton className="w-11 h-11 shrink-0 rounded-full bg-background-heavy" />
-      <div className="space-y-2 w-full">
-        <Skeleton className="h-2 bg-background-heavy w-[100px]" />
-        <Skeleton className="h-2 bg-background-heavy w-[180px]" />
+    <div className={cn("flex items-center gap-3 py-2", className)}>
+      <span className="skeleton size-11 shrink-0 rounded-full" />
+      <div className="flex flex-1 flex-col gap-2">
+        <span className="skeleton h-3 w-24 rounded-full" />
+        <span className="skeleton h-2.5 w-40 rounded-full" />
       </div>
     </div>
   );

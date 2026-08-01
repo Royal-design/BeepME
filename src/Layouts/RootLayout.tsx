@@ -1,26 +1,38 @@
-import { MobileNav } from "@/components/MobileNav";
-import { SideNav } from "@/components/SideNav";
+import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { IconRail } from "@/components/IconRail";
+import { AppSidebar } from "@/components/AppSidebar";
+import { MobileNav } from "@/components/MobileNav";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useChatsSubscription } from "@/hooks/useChatsSubscription";
+import { usePresence } from "@/hooks/usePresence";
 
 export const RootLayout = () => {
   const location = useLocation();
-  const isChatsChild = location.pathname.startsWith("/chats/");
+  useChatsSubscription();
+  usePresence();
+  const isMobile = useIsMobile();
+  const [collapsed, setCollapsed] = useState(false);
+  const isChatChild = location.pathname.startsWith("/chats/");
+
+  if (isMobile) {
+    return (
+      <div className="flex h-screen flex-col overflow-hidden bg-background text-foreground">
+        <main className="min-h-0 flex-1">
+          <Outlet />
+        </main>
+        {!isChatChild && <MobileNav />}
+      </div>
+    );
+  }
+
   return (
-    <div className="h-screen overflow-auto scrollbar-hidden">
-      <div className="h-full hidden md:flex w-full bg-[#120902]  text-white ">
-        <div className="py-3 pl-4">
-          <SideNav />
-        </div>
-        <main className="w-full py-2">
-          <Outlet />
-        </main>
-      </div>
-      <div className=" h-full flex flex-col md:hidden w-full bg-[#120902]  text-white ">
-        <main className="w-full  h-full py-2">
-          <Outlet />
-        </main>
-        <div>{!isChatsChild && <MobileNav />}</div>
-      </div>
+    <div className="flex h-screen overflow-hidden bg-background text-foreground">
+      <IconRail collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
+      <AppSidebar collapsed={collapsed} />
+      <main className="min-w-0 flex-1">
+        <Outlet />
+      </main>
     </div>
   );
 };

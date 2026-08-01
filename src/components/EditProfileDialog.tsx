@@ -2,7 +2,6 @@ import { EditProfilePage } from "@/pages/EditProfilePage";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle
 } from "./ui/dialog";
@@ -21,11 +20,12 @@ export const EditProfileDialog = ({
         onInteractOutside={(e) => {
           e.preventDefault();
         }}
-        className="bg-background border text-heavy border-border-color  max-w-sm w-sm"
+        className="max-w-sm rounded-2xl border-border bg-surface-raised text-popover-foreground"
       >
         <DialogHeader>
-          <DialogTitle></DialogTitle>
-          <DialogDescription />
+          <DialogTitle className="font-display text-lg font-semibold tracking-tight">
+            Edit profile
+          </DialogTitle>
         </DialogHeader>
         <EditProfilePage setIsEditDialogOpen={setIsEditDialogOpen} />
       </DialogContent>

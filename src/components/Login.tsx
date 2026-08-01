@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import googleImage from "../assets/google.webp";
-import chattLogo from "../assets/BEEPME.png";
+import { BEEPME } from "@/assets/logo";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,19 +13,13 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "./ui/card";
 import { LoginFormData, loginSchema } from "@/schema/loginSchema";
 import { useAppDispatch } from "@/redux/store";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser, loginWithGoogle } from "@/redux/slice/authSlice";
 import { toast } from "sonner";
 import { UserLoadingSpinner } from "./UserLoadingSpinner";
+import { AuthShell } from "./AuthShell";
 
 export const Login = () => {
   const [loadingLogin, setLoadingLogin] = useState(false);
@@ -49,7 +43,7 @@ export const Login = () => {
     setLoadingGoogle(false);
 
     if (response.success) {
-      toast.success("User logged in successfully");
+      toast.success("Signed in");
       navigate("/");
     } else {
       toast.error(response.message || "Google login failed");
@@ -64,7 +58,7 @@ export const Login = () => {
     setLoadingLogin(false);
 
     if (response.success) {
-      toast.success("User logged in successfully");
+      toast.success("Signed in");
       navigate("/chats");
       form.reset();
     } else {
@@ -73,99 +67,114 @@ export const Login = () => {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-8 h-screen flex flex-col p-8  justify-center  items-center w-full"
-      >
-        <Card className="max-w-sm text-light w-full mx-auto p-2 md:p-4 md:border md:border-border-color border-0 bg-background rounded-md ">
-          <CardHeader className="text-center flex mb-0 flex-col items-center w-full text-xl md:text-2xl my-4 font-bold">
-            <img
-              src={chattLogo}
-              alt="chatty-bee"
-              className="size-15 object-contain"
-            />
-            <CardTitle className="text-light">
-              {" "}
-              Log In to Your Account
-            </CardTitle>
-            <p className="text-sm text-light ">
-              Access Your Messages Instantly with BeepME
-            </p>
-          </CardHeader>
-          <CardContent className="px-0 gap-4 flex flex-col">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your email"
-                      {...field}
-                      className="border h-12 text-light border-border-color"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      className="border h-12 text-light border-border-color"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
+    <AuthShell>
+      <div className="w-full max-w-sm">
+        <div className="mb-8 flex flex-col items-center lg:hidden">
+          <img
+            src={BEEPME}
+            alt=""
+            className="size-14 rounded-2xl object-contain ring-1 ring-border"
+          />
+        </div>
 
-          <CardFooter className="p-0 flex-col gap-2">
-            <Button
-              disabled={loadingLogin || loadingGoogle}
-              type="submit"
-              className="w-full h-12 text-light bg-background-heavy border border-border-color hover:bg-background-hover duration-200 cursor-pointer"
+        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+          <h1 className="font-display text-2xl font-medium tracking-tight">
+            Welcome back
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Sign in to keep buzzing.
+          </p>
+
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="mt-6 space-y-4"
             >
-              {loadingLogin ? <UserLoadingSpinner /> : "Login"}
-            </Button>
-            <Button
-              disabled={loadingLogin || loadingGoogle}
-              onClick={handleGoogleLogin}
-              variant="ghost"
-              className="w-full h-12 cursor-pointer hover:bg-background-heavy duration-200 border border-border-color"
-            >
-              {loadingGoogle ? (
-                <UserLoadingSpinner />
-              ) : (
-                <div className="items-center flex text-light">
-                  <img src={googleImage} className="w-[2rem]" />
-                  <p>Google</p>
-                </div>
-              )}
-            </Button>
-            <p className="text-center text-light text-sm">
-              Don't have an account?{" "}
-              <Link
-                to="/register"
-                className="text-light hover:text-heavy transition"
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        autoComplete="email"
+                        placeholder="you@example.com"
+                        className="h-11 bg-background"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        autoComplete="current-password"
+                        placeholder="Your password"
+                        className="h-11 bg-background"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                disabled={loadingLogin || loadingGoogle}
+                type="submit"
+                className="h-11 w-full cursor-pointer"
               >
-                Sign Up
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
-      </form>
-    </Form>
+                {loadingLogin ? <UserLoadingSpinner /> : "Sign in"}
+              </Button>
+            </form>
+          </Form>
+
+          <div
+            className="my-5 flex items-center gap-3 text-[11px] tracking-wide text-faint uppercase"
+            aria-hidden
+          >
+            <span className="h-px flex-1 bg-border" />
+            or
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
+          <Button
+            disabled={loadingLogin || loadingGoogle}
+            onClick={handleGoogleLogin}
+            variant="outline"
+            className="h-11 w-full cursor-pointer"
+          >
+            {loadingGoogle ? (
+              <UserLoadingSpinner />
+            ) : (
+              <>
+                <img src={googleImage} alt="" className="size-4" />
+                Continue with Google
+              </>
+            )}
+          </Button>
+
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="font-medium text-accent transition-colors hover:text-accent-hover"
+            >
+              Sign up
+            </Link>
+          </p>
+        </div>
+      </div>
+    </AuthShell>
   );
 };
